@@ -1,0 +1,36 @@
+import random
+
+def random_gen():
+    result_text = []
+    for _ in range(32):
+        rand_num = random.randint(1, 255)
+        result_text.append(format(rand_num, '02x'))
+
+    return result_text
+
+def get_key(g, x, p):
+    keys = list(g) 
+    for i in range(32):
+        for _ in range(int(x[i],16)-1):
+            keys[i] = format(int(keys[i], 16) * int(g[i], 16), '02x')
+            keys[i] = format(int(keys[i], 16) % int(p[i], 16), '02x')
+    return keys
+
+
+#Начало обмена открытыми ключами
+a = random_gen()
+prim_root = random_gen()
+module = random_gen()
+keyA = get_key(prim_root, a, module)
+
+#Завершение обмена открытыми ключами
+b = random_gen() 
+keyB = get_key(prim_root, b, module)
+
+#Получение закрытых ключей
+close_keyA = get_key(keyB, a, module) #закрытый ключ
+close_keyB = get_key(keyA, b, module) #закрытый ключ
+
+print(close_keyA) 
+print(close_keyB)
+
